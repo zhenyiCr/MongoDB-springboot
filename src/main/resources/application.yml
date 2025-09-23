@@ -1,0 +1,10 @@
+server:
+  port: 8088
+
+spring:
+  data:
+    mongodb:
+      authentication-database: admin
+      database: springboot
+      host: 182.92.125.34
+      port: 27017
