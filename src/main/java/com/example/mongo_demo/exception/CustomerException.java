@@ -1,4 +1,4 @@
-package exception;
+package com.example.mongo_demo.exception;
 
 
 public class CustomerException extends RuntimeException {
