@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.example.mongo_demo.entity.User;
 import com.example.mongo_demo.repository.UserRepository;
 
-import exception.CustomerException;
+import com.example.mongo_demo.exception.CustomerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +27,7 @@ public class UserService {
 
     public void add(User user) {
         // 判断用户名是否已存在
-        User dbUser = userRepository.findAllByUsername(user.getUsername());
+        User dbUser = userRepository.findByUsername(user.getUsername());
         if (dbUser != null) {
             throw new CustomerException("账号已存在");
         }

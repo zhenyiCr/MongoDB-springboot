@@ -1,4 +1,4 @@
-package exception;
+package com.example.mongo_demo.exception;
 
 
 import com.example.mongo_demo.common.Result;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 //全局异常处理
-@ControllerAdvice("com.example.controller")
+@ControllerAdvice("com.example.mongo_demo.controller")
 public class GlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 

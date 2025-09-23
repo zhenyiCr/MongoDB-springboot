@@ -26,7 +26,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/suser")
+    @GetMapping("/user")
     public Result user(String username) {
         String user = userService.User(username);
         return Result.success(user);
@@ -53,11 +53,11 @@ public class UserController {
 //        return Result.success();
 //    }
 //
-//    @GetMapping("/selectAll")
-//    public Result slectAll(User user) {
-//        List<User> userList = userService.selectAll(user);
-//        return Result.success(userList);
-//    }
+    @GetMapping("/selectAll")
+    public Result selectAll(User user) {
+        List<User> userList = userService.selectAll(user);
+        return Result.success(userList);
+    }
 //
 //    // 分页查询
 //    // pageNum 当前页数
