@@ -1,6 +1,7 @@
 package com.example.mongo_demo.controller;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.db.PageResult;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
@@ -70,18 +71,15 @@ public class UserController {
 //    // pageNum 当前页数
 //    // pageSize 每页显示的条数
     @GetMapping("/selectPage")
-    public ResponseEntity<Page<User>> getUserByPage(
-            @RequestParam(defaultValue = "1") int page,  // 默认第一页
-            @RequestParam(defaultValue = "10") int size,   // 默认每页10条
-            User user ) {
-        // 1. 创建分页请求对象（可选：添加排序，例如按年龄倒序）
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "age") ); // 按age字段倒序
+    public PageResult<User> getUsers(
+            @RequestParam(defaultValue = "1") int pageNum,
+            @RequestParam(defaultValue = "10") int pageSize) {
 
-        // 2. 调用Service获取分页结果
-        Page<User> userPage = userService.getUserByPage(pageable);
-
-        // 3. 返回结果（Page对象会自动包含总条数、总页数等信息）
-        return ResponseEntity.ok(userPage);
+        Page<User> page = userService.findAllUsers(pageNum, pageSize);
+        return new PageResult<>(
+                pageNum,
+                pageSize
+        );
     }
 
 //    public Result slectPage(@RequestParam(defaultValue = "1") Integer pageNum,
