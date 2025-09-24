@@ -33,7 +33,7 @@
 
     <div>
       <el-table :data="data.tableData" style="width: 100%" @selection-change="handleSelectionChange"
-                :header-cell-style="{fontWeight:'bold',background:'#f5f5f5'}">
+                :header-cell-style="{fontWeight:'bold',background:'#f5f5f5'} ">
         <el-table-column type="selection" width="55"/>
         <el-table-column prop="username" label="账户"/>
         <el-table-column prop="name" label="姓名"/>
@@ -135,8 +135,8 @@ const handleSizeChange = (size) => {
 const getData = () => {
   request.get('/admin/selectPage', {
     params: {
-      skip: getSkip(),    // 传递 skip 参数
-      limit: data.pageSize, // 传递 limit 参数
+        page: data.pageNum - 1, // 转换为0-based页码
+        size: data.pageSize,
       name: data.name,
       username: data.username
     }

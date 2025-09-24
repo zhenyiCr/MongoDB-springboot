@@ -7,7 +7,9 @@ import com.example.mongo_demo.repository.UserRepository;
 import com.example.mongo_demo.exception.CustomerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,6 +39,16 @@ public class UserService {
             user.setPassword("user");
         }
         userRepository.save(user);
+    }
+
+    public Page<User> findAllUsers(int pageNum, int pageSize) {
+        // 创建分页对象，指定页码、每页大小和排序方式
+        Pageable pageable = PageRequest.of(
+                pageNum - 1,  // 注意：Spring Data的页码从0开始
+                pageSize,
+                Sort.by(Sort.Direction.DESC, "name")  // 按名称降序排序
+        );
+        return userRepository.findAll(pageable);
     }
 
     public Page<User> getUserByPage(Pageable pageable) {

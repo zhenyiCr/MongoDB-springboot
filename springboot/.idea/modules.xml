@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MongoDB-springboot1.iml" filepath="$PROJECT_DIR$/MongoDB-springboot1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../vue/vue.iml" filepath="$PROJECT_DIR$/../vue/vue.iml" />
     </modules>
   </component>
 </project>
