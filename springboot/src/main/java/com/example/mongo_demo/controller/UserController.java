@@ -71,15 +71,13 @@ public class UserController {
 //    // pageNum 当前页数
 //    // pageSize 每页显示的条数
     @GetMapping("/selectPage")
-    public PageResult<User> getUsers(
+    public Result selectPage(
             @RequestParam(defaultValue = "1") int pageNum,
             @RequestParam(defaultValue = "10") int pageSize) {
 
         Page<User> page = userService.findAllUsers(pageNum, pageSize);
-        return new PageResult<>(
-                pageNum,
-                pageSize
-        );
+        ResponseEntity<Page<User>> ok = ResponseEntity.ok(page);
+        return Result.success(ok);
     }
 
 //    public Result slectPage(@RequestParam(defaultValue = "1") Integer pageNum,
