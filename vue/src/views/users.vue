@@ -20,7 +20,7 @@
         <el-button @click="exportDate" type="success">批量导出</el-button>
         <el-upload
             style="display: inline-block;margin-left: 10px"
-            action="http://localhost:8088/admin/import"
+            action="http://localhost:8088/user/import"
             :show-file-list="false"
             :on-success="handleImportSuccess"
         >
@@ -119,31 +119,20 @@ const data = reactive({
 
 const formRef = ref()
 
-// 计算 MongoDB 需要的 skip 值
-const getSkip = () => {
-  return (data.pageNum - 1) * data.pageSize
-}
-
-// 页大小变化时重置页码为1
-const handleSizeChange = (size) => {
-  data.pageSize = size
-  data.pageNum = 1  // 页大小改变时从第一页开始
-  getData()
-}
-
 // 修改数据获取方法，使用 skip 和 limit
 const getData = () => {
-  request.get('/admin/selectPage', {
+  request.get('/user/selectPage', {
     params: {
-        page: data.pageNum - 1, // 转换为0-based页码
-        size: data.pageSize,
+      pageNum: data.pageNum , // 转换为0-based页码
+      pageSize: data.pageSize,
       name: data.name,
       username: data.username
     }
   }).then(res => {
     if (res.code === '200') {
-      data.tableData = res.data.list
-      data.total = res.data.total  // 总条数仍需要后端返回
+      data.tableData = res.data.body.content
+      data.pageNum = res.data.body.pageable.pageNumber + 1
+      data.total = res.data.body.totalElements  // 总条数仍需要后端返回
     } else {
       ElMessage.error(res.msg)
     }
@@ -163,7 +152,7 @@ const add = () => {
   // formRef 表单的验证
   formRef.value.validate((valid) => {
     if (valid) { // 表单验证成功
-      request.post('/admin/add', data.form).then(res => {
+      request.post('/user/add', data.form).then(res => {
         if (res.code === '200') {
           ElMessage.success("新增成功")
           data.formVisible = false
@@ -183,7 +172,7 @@ const edit = () => {
   // formRef 表单的验证
   formRef.value.validate((valid) => {
     if (valid) { // 表单验证成功
-      request.put('/admin/update', data.form).then(res => {
+      request.put('/user/update', data.form).then(res => {
         if (res.code === '200') {
           ElMessage.success("修改成功")
           data.formVisible = false
@@ -201,7 +190,7 @@ const save = () => {
 
 const del = (id) => {
   ElMessageBox.confirm(' 你确定删除信息吗', 'Warning', {type: 'warning'}).then(() => {
-    request.delete('/admin/delete/' + id).then(res => {
+    request.delete('/user/delete/' + id).then(res => {
       if (res.code === '200') {
         ElMessage.success("删除成功")
         getData()
@@ -224,7 +213,7 @@ const deleteBatch = () => {
     return
   }
   ElMessageBox.confirm(' 你确定删除信息吗', 'Warning', {type: 'warning'}).then(() => {
-    request.delete('/admin/deleteBatch', {data: data.rows}).then(res => {
+    request.delete('/user/deleteBatch', {data: data.rows}).then(res => {
       if (res.code === '200') {
         ElMessage.success("删除成功")
         getData()
@@ -237,7 +226,7 @@ const deleteBatch = () => {
 
 const exportDate = () => {
   let idsStr = data.ids.join(",") // 把数组转换成 字符串  [1,2,3] -> "1,2,3"
-  let url = `http://localhost:8080/admin/export?username=${data.username === null ? '' : data.username}`
+  let url = `http://localhost:8080/user/export?username=${data.username === null ? '' : data.username}`
       + `&name=${data.name === null ? '' : data.name}`
       + `&ids=${idsStr}`
   window.open(url)

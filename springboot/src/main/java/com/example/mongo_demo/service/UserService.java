@@ -42,13 +42,20 @@ public class UserService {
     }
 
     public Page<User> findAllUsers(int pageNum, int pageSize) {
-        // 创建分页对象，指定页码、每页大小和排序方式
-        Pageable pageable = PageRequest.of(
-                pageNum - 1,  // 注意：Spring Data的页码从0开始
-                pageSize,
-                Sort.by(Sort.Direction.DESC, "name")  // 按名称降序排序
-        );
-        return userRepository.findAll(pageable);
+        // 1. 构建 Pageable 对象 (使用 PageRequest)
+        // ** 非常重要：页码是从 0 开始的！**
+        Pageable pageable = PageRequest.of(pageNum-1, pageSize);
+        // 2. 调用 Repository 的分页方法
+        Page<User> userPage = userRepository.findAll(pageable);
+
+        // 4. 返回 Page 对象，它包含了数据和分页元数据
+        System.out.println("Total Elements: " + userPage.getTotalElements());
+        System.out.println("Total Pages: " + userPage.getTotalPages());
+        System.out.println("Current Page Number: " + userPage.getNumber());
+        System.out.println("Page Size: " + userPage.getSize());
+        System.out.println("Users on current page: " + userPage.getContent());
+
+        return userPage;
     }
 
     public Page<User> getUserByPage(Pageable pageable) {
