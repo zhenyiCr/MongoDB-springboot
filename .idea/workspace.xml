@@ -5,9 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ce64c50-ebc3-48f1-9b44-44597635acf5" name="更改" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/springboot/src/main/java/com/example/mongo_demo/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/springboot/src/main/java/com/example/mongo_demo/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/src/main/java/com/example/mongo_demo/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/springboot/src/main/java/com/example/mongo_demo/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot/src/main/java/com/example/mongo_demo/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/springboot/src/main/java/com/example/mongo_demo/entity/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/springboot/src/main/java/com/example/mongo_demo/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/springboot/src/main/java/com/example/mongo_demo/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot/target/classes/com/example/mongo_demo/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/springboot/target/classes/com/example/mongo_demo/controller/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue/src/views/users.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue/src/views/users.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +103,7 @@
       <workItem from="1758717226489" duration="288000" />
       <workItem from="1758931313443" duration="4468000" />
       <workItem from="1758937632065" duration="108000" />
-      <workItem from="1758948348569" duration="6928000" />
+      <workItem from="1758948348569" duration="8448000" />
     </task>
     <servers />
   </component>

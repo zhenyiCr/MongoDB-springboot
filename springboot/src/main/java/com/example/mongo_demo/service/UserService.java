@@ -29,8 +29,11 @@ public class UserService {
         else throw new CustomerException("用户名不存在");
     }
 
-    public List<User> selectAll(User user) {
+    public List<User> selectAll() {
         return userRepository.findAll();
+    }
+    public List<User> selectById(List<String> id) {
+        return userRepository.findAllById(id);
     }
 
     public void add(User user) {
