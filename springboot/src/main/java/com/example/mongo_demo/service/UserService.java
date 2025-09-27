@@ -75,17 +75,12 @@ public class UserService {
 
     }
 
-//    public void update(User user) {
-//        if (!userMapper.selectUsername(user).equals(user.getUsername())) {
-//            User dbUser = userMapper.selectByUsername(user.getUsername());
-//            if (dbUser != null) {
-//                throw new CustomerException("账号已存在");
-//            }
-//        }
-//        userMapper.update(user);
-//
-//    }
-//
+    public void update(User user) {
+
+        userRepository.save(user);
+
+    }
+
     public void deleteById(String id) {
         userRepository.deleteById(id);
     }
