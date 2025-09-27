@@ -227,7 +227,7 @@ const deleteBatch = () => {
 
 const exportDate = () => {
   let idsStr = data.ids.join(",") // 把数组转换成 字符串  [1,2,3] -> "1,2,3"
-  let url = `http://localhost:8080/user/export?username=${data.username === null ? '' : data.username}`
+  let url = `http://localhost:8088/user/export?username=${data.username === null ? '' : data.username}`
       + `&name=${data.name === null ? '' : data.name}`
       + `&ids=${idsStr}`
   window.open(url)

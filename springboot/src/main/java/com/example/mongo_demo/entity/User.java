@@ -7,6 +7,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Document(collection = "user")
 public class User {
     @Id
@@ -20,18 +22,8 @@ public class User {
 
     //非数据库属性
     private String ids;
-    private String[] idArr;
+    private List<String> idArr;
 
-    public String getIds() {
-        return ids;
-    }
-    public void setIds(String ids) {
-        this.ids = ids;
-    }
-
-    public void setIdArr(String[] idArr) {
-        this.idArr = idArr;
-    }
 
     public String getId() {
         return id;
@@ -86,5 +78,19 @@ public class User {
     }
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getIds() {
+        return ids;
+    }
+    public void setIds(String ids) {
+        this.ids = ids;
+    }
+
+    public void setIdArr(List<String> idArr) {
+        this.idArr = idArr;
+    }
+    public List<String> getIdArr() {
+        return idArr;
     }
 }
