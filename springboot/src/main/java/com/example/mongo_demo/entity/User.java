@@ -1,15 +1,14 @@
 package com.example.mongo_demo.entity;
 
 import jdk.jfr.DataAmount;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection = "user")
 public class User {
-    @Field("_id")
     @Id
     private String id;
     private String username;

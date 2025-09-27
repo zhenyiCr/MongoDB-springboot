@@ -5,18 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ce64c50-ebc3-48f1-9b44-44597635acf5" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/src/main/java/com/example/mongo_demo/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/springboot/src/main/java/com/example/mongo_demo/controller/UserController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/springboot/src/main/java/com/example/mongo_demo/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/springboot/src/main/java/com/example/mongo_demo/entity/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/springboot/src/main/java/com/example/mongo_demo/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/springboot/src/main/java/com/example/mongo_demo/repository/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/springboot/src/main/java/com/example/mongo_demo/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/springboot/src/main/java/com/example/mongo_demo/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/springboot/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/springboot/target/classes/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/target/classes/com/example/mongo_demo/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/springboot/target/classes/com/example/mongo_demo/controller/UserController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/target/classes/com/example/mongo_demo/entity/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/springboot/target/classes/com/example/mongo_demo/entity/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/target/classes/com/example/mongo_demo/repository/UserRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/springboot/target/classes/com/example/mongo_demo/repository/UserRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springboot/target/classes/com/example/mongo_demo/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/springboot/target/classes/com/example/mongo_demo/service/UserService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue/src/views/users.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue/src/views/users.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,6 +15,19 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <excluded-from-favorite>
+      <branch-storage>
+        <map>
+          <entry type="REMOTE">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="origin/main" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </excluded-from-favorite>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MavenImportPreferences">
@@ -96,22 +100,11 @@
       <workItem from="1758717226489" duration="288000" />
       <workItem from="1758931313443" duration="4468000" />
       <workItem from="1758937632065" duration="108000" />
-      <workItem from="1758948348569" duration="3706000" />
+      <workItem from="1758948348569" duration="5679000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/springboot/src/main/java/com/example/mongo_demo/controller/UserController.java</url>
-          <line>79</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

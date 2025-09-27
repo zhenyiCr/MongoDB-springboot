@@ -1,5 +1,6 @@
 package com.example.mongo_demo.service;
 
+import cn.hutool.core.lang.ObjectId;
 import cn.hutool.core.util.StrUtil;
 import com.example.mongo_demo.entity.User;
 import com.example.mongo_demo.repository.UserRepository;
