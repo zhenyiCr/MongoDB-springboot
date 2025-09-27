@@ -12,10 +12,7 @@ import com.example.mongo_demo.service.UserService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,16 +41,17 @@ public class UserController {
         return Result.success();
     }
 
-    //    @DeleteMapping("/delete/{id}")
-//    public Result delete(@PathVariable Integer id) { // @PathVariable 接受路径参数
-//        userService.deleteById(id);
-//        return Result.success();
-//    }
-//    @DeleteMapping("/deleteBatch")
-//    public Result deleteBatch(@RequestBody List<User> list) {
-//        userService.deleteBatch(list);
-//        return Result.success();
-//    }
+    @DeleteMapping("/delete/{id}")
+    public Result delete(@PathVariable String id) { // @PathVariable 接受路径参数
+        userService.deleteById(id);
+        return Result.success();
+    }
+    @DeleteMapping("/deleteBatch")
+    public Result deleteBatch(@RequestBody List<User> list) {
+        userService.deleteBatch(list);
+        return Result.success();
+    }
+
 //    @PutMapping("/update")
 //    public Result update(@RequestBody User user) {
 //        userService.update(user);
@@ -73,20 +71,16 @@ public class UserController {
     @GetMapping("/selectPage")
     public Result selectPage(
             @RequestParam(defaultValue = "1") int pageNum,
-            @RequestParam(defaultValue = "10") int pageSize) {
-
-        Page<User> page = userService.findAllUsers(pageNum, pageSize);
-        ResponseEntity<Page<User>> ok = ResponseEntity.ok(page);
+            @RequestParam(defaultValue = "10") int pageSize,
+            User user
+            ) {
+//        Page<User> page = userService.findAll(pageNum, pageSize, user);
+//        return Result.success(page);
+        PageImpl<User> all = userService.findAll(pageNum, pageSize, user);
+        ResponseEntity<Page<User>> ok = ResponseEntity.ok(all);
         return Result.success(ok);
     }
 
-//    public Result slectPage(@RequestParam(defaultValue = "1") Integer pageNum,
-//                            @RequestParam(defaultValue = "10") Integer pageSize,
-//                            User user) {
-//        PageInfo<User> pageInfo = userService.selectPage(pageNum,pageSize,user);
-//        return Result.success(pageInfo);
-//    }
-//
 //    // excel 导出
 //    @GetMapping("/export")
 //    public void exportDate(User user, HttpServletResponse response) throws Exception {

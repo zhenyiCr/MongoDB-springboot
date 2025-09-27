@@ -10,7 +10,7 @@
                   placeholder="请输入姓名"
                   :prefix-icon="Search"
                   v-model="data.name"></el-input>
-        <el-button type="primary" @click="getData">查询</el-button>
+        <el-button type="primary" @click="getData" >查询</el-button>
         <el-button @click="reset">重置</el-button>
       </div>
 
@@ -139,6 +139,7 @@ const getData = () => {
   })
 }
 getData()
+
 const reset = () => {
   data.username = null
   data.name = null
