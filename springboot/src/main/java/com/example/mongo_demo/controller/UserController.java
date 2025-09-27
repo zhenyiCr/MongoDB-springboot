@@ -52,12 +52,12 @@ public class UserController {
         return Result.success();
     }
 
-//    @PutMapping("/update")
-//    public Result update(@RequestBody User user) {
-//        userService.update(user);
-//        return Result.success();
-//    }
-//
+    @PutMapping("/update")
+    public Result update(@RequestBody User user) {
+        userService.update(user);
+        return Result.success();
+    }
+
     @GetMapping("/selectAll")
     public Result selectAll(User user) {
         List<User> userList = userService.selectAll(user);
