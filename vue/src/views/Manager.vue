@@ -12,7 +12,7 @@
       <div class="header-content">
         <el-breadcrumb class="breadcrumb" separator="/">
           <el-breadcrumb-item :to="{ path: '/manager/home' }">首页</el-breadcrumb-item>
-        <span>{{ router.currentRoute.value.meta.name }}</span>
+          <span>{{ router.currentRoute.value.meta.name }}</span>
         </el-breadcrumb>
 
         <div class="header-actions">
@@ -27,7 +27,7 @@
                   src="https://picsum.photos/id/1005/40/40"
                   alt="管理员头像"
               >
-              <span class="username">管理员</span>
+              <span class="username">{{data.user?.name}}</span>
               <el-icon class="arrow-icon">
                 <ChevronDown/>
               </el-icon>
@@ -94,7 +94,8 @@
               </el-icon>
               <span>系统设置</span>
             </template>
-            <el-menu-item index="/manager/users">用户管理</el-menu-item>
+            <el-menu-item index="/manager/admin">管理员信息</el-menu-item>
+            <el-menu-item index="/manager/user">普通用户信息</el-menu-item>
             <el-menu-item index="/manager/system/roles">角色权限</el-menu-item>
             <el-menu-item index="/manager/system/logs">操作日志</el-menu-item>
           </el-sub-menu>
@@ -124,7 +125,11 @@
 </template>
 
 <script setup>
+import {reactive} from 'vue'
 import router from "../router/index.js";
+const data = reactive({
+  user : JSON.parse(localStorage.getItem('user'))
+})
 
 const Logout = () => {
   localStorage.removeItem('user')
