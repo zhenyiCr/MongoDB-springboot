@@ -2,8 +2,10 @@ package com.example.mongo_demo.service;
 
 import cn.hutool.core.lang.ObjectId;
 import cn.hutool.core.util.StrUtil;
+import com.example.mongo_demo.entity.Account;
 import com.example.mongo_demo.entity.User;
 import com.example.mongo_demo.repository.UserRepository;
+import com.example.mongo_demo.utils.TokenUtils;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.query.Query;
 import com.example.mongo_demo.exception.CustomerException;
@@ -47,6 +49,10 @@ public class UserService {
             user.setPassword("user");
         }
         userRepository.save(user);
+    }
+
+    public User findUserById(String id) {
+        return userRepository.findUserById(id);
     }
 
     public PageImpl<User> findAll(int pageNum, int pageSize,User user) {
@@ -94,14 +100,21 @@ public class UserService {
         }
     }
 
-//    public User login(User user) {
-//        User dbUser = userMapper.selectByUsername(user.getUsername());
-//        if (dbUser == null) {
-//            throw new CustomerException("用户名不存在");
-//        }
-//        if (!dbUser.getPassword().equals(user.getPassword())) {
-//            throw new CustomerException("账号或密码错误");
-//        }
-//        return dbUser;
-//    }
+    public User login(Account account) {
+        User dbUser = userRepository.findByUsername(account.getUsername());
+        if (dbUser == null) {
+            throw new CustomerException("用户名不存在");
+        }
+        if (!dbUser.getPassword().equals(account.getPassword())) {
+            throw new CustomerException("账号或密码错误");
+        }
+        String token = TokenUtils.createToken(dbUser.getId() + "-" +"USER", dbUser.getPassword());
+        dbUser.setToken(token);
+        return dbUser;
+    }
+
+    public void register(User user) {
+        this.add(user);
+    }
+
 }

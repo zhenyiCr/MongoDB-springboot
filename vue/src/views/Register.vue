@@ -3,7 +3,7 @@
         <div
                 style="width: 350px; background-color: white;OPACITY: 0.5; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 40px 20px">
             <el-form status-icon ref="formRef" :model="data.form" :rules="data.rules">
-                <div style="margin-bottom: 40px; text-align: center; font-weight: bold; font-size: 24px">欢 迎 登 录
+                <div style="margin-bottom: 40px; text-align: center; font-weight: bold; font-size: 24px">欢 迎 注 册
                 </div>
                 <el-form-item prop="username">
                     <el-input size="large" v-model="data.form.username" autocomplete="off" prefix-icon="User"
@@ -14,17 +14,16 @@
                               prefix-icon="Lock"
                               placeholder="请输入密码"/>
                 </el-form-item>
-                <el-form-item prop="role">
-                    <el-select size="large" style="width: 100%" v-model="data.form.role">
-                        <el-option label="管理员" value="ADMIN"></el-option>
-                        <el-option label="普通用户" value="USER"></el-option>
-                    </el-select>
+                <el-form-item prop="confirmPassword">
+                    <el-input size="large" show-password v-model="data.form.confirmPassword" autocomplete="off"
+                              prefix-icon="Lock"
+                              placeholder="请再次输入密码"/>
                 </el-form-item>
                 <div style="margin-bottom: 20px">
-                    <el-button style="width: 100%" size="large" type="primary" @click="login">登录</el-button>
+                    <el-button style="width: 100%" size="large" type="primary" @click="register">登录</el-button>
                 </div>
                 <div style="text-align: right">
-                    还没有账号？请<a style="color: #2c82ff" href="/register">注册</a>
+                    已有账号？请<a style="color: #2c82ff" href="/login">登录</a>
                 </div>
 
             </el-form>
@@ -39,9 +38,17 @@ import {ElMessage} from "element-plus";
 import request from "@/utils/request.js";
 import router from "@/router/index.js";
 
+const validatePass = (rule, value, callback) => {
+    // value 表示用户输入的确认密码
+    if (value !== data.form.password) {
+        callback(new Error("两次密码不一样"))
+    } else {
+        callback()
+    }
+}
 const formRef = ref()
 const data = reactive({
-    form: {role: 'ADMIN'},
+    form: {},
     rules: {
         username: [
             {required: true, message: '请输入账号', trigger: 'blur'},
@@ -49,33 +56,28 @@ const data = reactive({
         password: [
             {required: true, message: '请输入密码', trigger: 'blur'},
         ],
+        confirmPassword :[
+            {required: true, message: '请再次输入密码', trigger: 'blur'},
+            {validator : validatePass,trigger: 'blur'}
+        ]
     },
 })
-const login = () => {
+
+const register = () => {
+    // formRef 表单的验证
     formRef.value.validate((valid) => {
         if (valid) {
-            request.post('/login', data.form).then(res => {
+            request.post('/register', data.form).then(res => {
                 if (res.code === '200') {
-                    // 存储用户消息
-                    localStorage.setItem('user', JSON.stringify(res.data))
-                    ElMessage.success("登录成功")
-                    router.push('/')
+                    ElMessage.success("注册成功")
+                    router.push('/login')
                 } else {
                     ElMessage.error(res.msg)
                 }
             })
         }
     })
-}
 
-let userStr = localStorage.getItem('user')
-if (userStr) {
-    let user = JSON.parse(userStr)
-    if (user.id) {
-        router.push('/')
-    }
-} else {
-    router.push('/login')
 }
 
 </script>

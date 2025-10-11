@@ -7,11 +7,13 @@ const router = createRouter({
         {
             path: '/manager', component:() => import('../views/Manager.vue'),
             children: [
-                {path: 'home',meta: {name: '主页'}, component:() => import('../views/home.vue')},
-                {path: 'users',meta: {name: '用户管理'}, component:() => import('../views/users.vue')},
+                {path: 'home',meta: {name: '主页'}, component:() => import('../views/Home.vue')},
+                {path: 'user',meta: {name: '普通用户信息'}, component:() => import('../views/User.vue')},
+                {path: 'admin',meta: {name: '管理员信息'}, component:() => import('../views/Admin.vue')},
             ]
         },
-        {path: '/login', component: import('../views/Login.vue'),},
+        {path: '/login', component: import('../views/Login.vue')},
+        {path: '/register', component: import('../views/Register.vue')}
 
     ],
 })
