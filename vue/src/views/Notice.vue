@@ -102,8 +102,8 @@ const getData = () => {
         }
     ).then(res => {
         if (res.code === '200') {
-            data.tableData = res.data?.list
-            data.total = res.data?.total
+            data.tableData = res.data?.content || []
+            data.total = res.data?.totalElements || 0
         } else {
             ElMessage.error(res.msg)
         }

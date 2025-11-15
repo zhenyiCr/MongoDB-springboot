@@ -37,4 +37,6 @@ public interface ClubMemberRepository extends MongoRepository<ClubMember, String
 
     // 对应原selectLeaderByStudentId：根据学生ID查询其作为"领导者"的记录
     ClubMember findByStudentIdAndRole(String studentId, String role);
+
+    List<ClubMember> findByClubIdAndRole(String clubId, String role);
 }

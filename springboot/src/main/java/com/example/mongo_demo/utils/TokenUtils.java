@@ -60,7 +60,7 @@ public class TokenUtils {
         // 根据token解析出来的userId 去对应的表查询用户信息
         if ("ADMIN".equals(role)) {
             return staticAdminService.findAdminById(id);
-        } else if ("USER".equals(role)) {
+        } else if ("STUDENT".equals(role)) {
             return staticStudentService.findStudentById(id);
         } else {
             throw new CustomerException("404", "出现错误");

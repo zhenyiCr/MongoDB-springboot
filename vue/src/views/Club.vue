@@ -131,7 +131,7 @@ editorConfig.MENU_CONF['uploadImage'] = {
     headers: {
         token: data.user.token,
     },
-    server: 'http://127.0.0.1:8080/file/wang/upload', // 服务端上传地址
+    server: 'http://127.0.0.1:8088/file/wang/upload', // 服务端上传地址
     fieldName: 'file', // 服务端接收图片的参数名
     // 新增：图片插入后的默认样式（限制最大宽度）
     image: {
@@ -164,8 +164,8 @@ const getData = () => {
         }
     ).then(res => {
         if (res.code === '200') {
-            data.tableData = res.data.list
-            data.total = res.data.total
+            data.tableData = res.data.content || []
+            data.total = res.data.totalElements || 0
         } else {
             ElMessage.error(res.msg)
         }

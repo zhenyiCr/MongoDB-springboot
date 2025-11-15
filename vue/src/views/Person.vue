@@ -11,7 +11,7 @@
 
             <el-form-item prop="avatar" label="头像">
                 <el-upload
-                    action="http://127.0.0.1:8080/file/upload"
+                    action="http://127.0.0.1:8088/file/upload"
                     :headers="{token: data.user.token}"
                     :on-success="handleFileSuccess"
                     :file-list="fileList"
@@ -35,13 +35,13 @@
             <el-form-item prop="name" label="名称">
                 <el-input v-model="data.user.name" autocomplete="off"/>
             </el-form-item>
-            <el-form-item prop="major" label="专业">
+            <el-form-item prop="major" label="专业" v-if="data.user.role === 'STUDENT'">
                 <el-input v-model="data.user.major" autocomplete="off"/>
             </el-form-item>
-            <el-form-item prop="grade" label="年级">
+            <el-form-item prop="grade" label="年级" v-if="data.user.role === 'STUDENT'">
                 <el-input v-model="data.user.grade" autocomplete="off"/>
             </el-form-item>
-            <el-form-item prop="college" label="学院">
+            <el-form-item prop="college" label="学院" v-if="data.user.role === 'STUDENT'">
                 <el-input v-model="data.user.college" autocomplete="off"/>
             </el-form-item>
 
@@ -80,11 +80,12 @@ onMounted(() => {
 
 // 上传成功回调：更新头像地址 & 文件列表
 const handleFileSuccess = (res) => {
-    if (res.code === 200) { // 假设后端返回 { code: 200, data: { url: "图片地址" } }
-        data.user.avatar = res.data.url;
+    console.log(res.data)
+    if (res.code === '200') {
+        data.user.avatar = res.data;
         // 保持文件列表只有一个头像（替换逻辑）
         fileList.splice(0, fileList.length, {
-            url: res.data.url,
+            url: res.data,
             name: "avatar",
         });
     }

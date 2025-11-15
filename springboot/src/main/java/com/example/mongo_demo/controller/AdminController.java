@@ -54,7 +54,7 @@ public class AdminController {
     // pageNum 当前页数
     // pageSize 每页显示的条数
     @GetMapping("/selectPage")
-    public Result slectPage(@RequestParam(defaultValue = "1") Integer pageNum,
+    public Result selectPage(@RequestParam(defaultValue = "1") Integer pageNum,
                             @RequestParam(defaultValue = "10") Integer pageSize,
                             Admin admin) {
         Page<Admin> pageInfo = adminService.selectPage(pageNum, pageSize, admin);

@@ -1,24 +1,23 @@
 package com.example.mongo_demo.service;
 
 import cn.hutool.core.date.DateUtil;
-import com.example.mongo_demo.entity.Account;
-import com.example.mongo_demo.entity.Application;
-import com.example.mongo_demo.entity.Club;
-import com.example.mongo_demo.entity.ClubMember;
+import com.example.mongo_demo.entity.*;
 import com.example.mongo_demo.exception.CustomerException;
 import com.example.mongo_demo.repository.ApplicationRepository;
 import com.example.mongo_demo.repository.ClubMemberRepository;
 import com.example.mongo_demo.repository.ClubRepository;
+import com.example.mongo_demo.repository.StudentRepository;
 import com.example.mongo_demo.utils.TokenUtils;
 import jakarta.annotation.Resource;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class ApplicationService {
@@ -28,6 +27,9 @@ public class ApplicationService {
     ClubRepository clubRepository;
     @Resource
     private ClubMemberRepository clubMemberRepository;
+    @Resource
+    StudentRepository studentRepository;
+
 
     public List<Application> selectAll(Application application) {
         // 构建动态查询条件（非null字段作为查询条件）
@@ -70,36 +72,60 @@ public class ApplicationService {
 
     // 分页查询申请（管理员/学生视角）
     public Page<Application> selectPage(Integer pageNum, Integer pageSize, Application application) {
-        Account currentUser = TokenUtils.getCurrentUser(); // 获取当前用户
-        String userRole = currentUser.getRole(); // 全局角色（ADMIN/STUDENT）
+        Account currentUser = TokenUtils.getCurrentUser();
+        String userRole = currentUser.getRole();
 
-        // 1. 管理员（ADMIN）：无限制，可查所有申请
+        // 权限过滤逻辑（保持不变）
         if ("ADMIN".equals(userRole)) {
-            // 不额外限制，直接构建条件
-        }
-        // 2. 学生（STUDENT）：区分社长和普通成员
-        else if ("STUDENT".equals(userRole)) {
-            // 2.1 判断当前学生是否为某社团的社长
+            // 管理员无限制
+        } else if ("STUDENT".equals(userRole)) {
             ClubMember leader = clubMemberRepository.findByStudentIdAndRole(currentUser.getId(), "LEADER");
             if (leader != null) {
-                // 社长：仅能查看自己社团的所有申请（用clubId限制）
                 application.setClubId(leader.getClubId());
             } else {
-                // 普通成员：仅能查看自己提交的申请（用studentId限制）
                 application.setStudentId(currentUser.getId());
             }
-        }
-        // 3. 其他角色：无权限
-        else {
+        } else {
             throw new CustomerException("权限不足，无法查看申请");
         }
 
-        // MongoDB分页页码从0开始，需减1
+        // 分页查询申请列表
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
-        // 构建查询条件
         Example<Application> example = Example.of(application);
-        // 执行分页查询
-        return applicationRepository.findAll(example, pageable);
+        Page<Application> applicationPage = applicationRepository.findAll(example, pageable);
+        List<Application> applications = applicationPage.getContent();
+
+        if (!applications.isEmpty()) {
+            // 1. 收集所有需要关联的ID
+            Set<String> studentIds = applications.stream()
+                    .map(Application::getStudentId)
+                    .collect(Collectors.toSet());
+            Set<String> clubIds = applications.stream()
+                    .map(Application::getClubId)
+                    .collect(Collectors.toSet());
+
+            // 2. 批量查询学生和社团信息
+            Map<String, Student> studentMap = studentRepository.findAllById(studentIds).stream()
+                    .collect(Collectors.toMap(Student::getId, Function.identity()));
+            Map<String, Club> clubMap = clubRepository.findAllById(clubIds).stream()
+                    .collect(Collectors.toMap(Club::getId, Function.identity()));
+
+            // 3. 填充关联字段
+            for (Application app : applications) {
+                // 填充学生姓名
+                Student student = studentMap.get(app.getStudentId());
+                if (student != null) {
+                    app.setStudentName(student.getName());
+                }
+                // 填充社团名称
+                Club club = clubMap.get(app.getClubId());
+                if (club != null) {
+                    app.setClubName(club.getName());
+                }
+            }
+        }
+
+        return new PageImpl<>(applications, pageable, applicationPage.getTotalElements());
     }
 
 

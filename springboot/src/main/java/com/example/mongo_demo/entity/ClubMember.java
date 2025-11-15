@@ -21,4 +21,5 @@ public class ClubMember {
     // 非数据库字段，用于前端显示
     private String clubName;
     private String studentName;
+    private String studentUsername;
 }
