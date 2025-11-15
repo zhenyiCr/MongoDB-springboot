@@ -28,10 +28,6 @@ public class ClubController {
     }
     @DeleteMapping("/delete/{id}")
     public Result delete(@PathVariable String id) { // @PathVariable 接受路径参数
-        Account currentUser = TokenUtils.getCurrentUser();
-        if (!"ADMIN".equals(currentUser.getRole())) {
-            return Result.error("只有管理员可以删除社团");
-        }
         clubService.deleteById(id);
         return Result.success();
     }

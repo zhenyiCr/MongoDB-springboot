@@ -79,14 +79,32 @@ public class StudentService {
 
 
     public void update(Student student) {
-        if (!studentRepository.findUsernameById(student.getId()).equals(student.getUsername())) {
-            Student dbStudent = studentRepository.findByUsername(student.getUsername());
-            if (dbStudent != null) {
-                throw new CustomerException("账号已存在");
+        // 1. 校验待更新的学生是否存在
+        Student existingStudent = studentRepository.findStudentById(student.getId());
+        if (existingStudent == null) {
+            throw new CustomerException("该学生不存在，无法更新");
+        }
+
+        // 2. 校验用户名是否修改，若修改则检查是否已被占用
+        String originalUsername = existingStudent.getUsername();
+        String newUsername = student.getUsername();
+        if (!originalUsername.equals(newUsername)) { // 用户名有修改
+            Student userWithNewUsername = studentRepository.findByUsername(newUsername);
+            if (userWithNewUsername != null) { // 新用户名已被其他学生占用
+                throw new CustomerException("用户名已存在，请更换");
             }
         }
-        studentRepository.save(student);
 
+        // 3. 基于已有实体更新字段（避免覆盖未传递的字段）
+        existingStudent.setUsername(newUsername); // 更新用户名
+        existingStudent.setName(student.getName()); // 更新姓名
+        existingStudent.setMajor(student.getMajor()); // 更新专业
+        existingStudent.setGrade(student.getGrade()); // 更新年级
+        existingStudent.setCollege(student.getCollege()); // 更新学院
+        // ... 其他需要更新的字段（根据业务需求补充）
+
+        // 4. 保存更新后的实体
+        studentRepository.save(existingStudent);
     }
 
     public void deleteById(String id) {

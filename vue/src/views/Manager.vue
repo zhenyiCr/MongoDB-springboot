@@ -64,7 +64,7 @@
                         </el-icon>
                         <span>社团信息</span>
                     </el-menu-item>
-                    <el-sub-menu index="system" v-if="data.user.role === 'ADMIN'">
+                    <el-sub-menu index="system" v-if="data.user?.role === 'ADMIN'">
                         <template #title>
                             <el-icon><User /></el-icon>
                             <span>角色管理</span>

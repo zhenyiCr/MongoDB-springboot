@@ -19,15 +19,6 @@
             <div style="margin-bottom: 5px;margin-top: 5px">
                 <el-button @click="headleAdd" type="primary">新增</el-button>
                 <el-button @click="deleteBatch" type="danger">批量删除</el-button>
-                <el-button @click="exportDate" type="success">批量导出</el-button>
-                <el-upload
-                        style="display: inline-block;margin-left: 10px"
-                        action="http://localhost:8080/admin/import"
-                        :show-file-list="false"
-                        :on-success="handleImportSuccess"
-                >
-                    <el-button type="primary">导入</el-button>
-                </el-upload>
 
             </div>
         </div>
@@ -100,7 +91,7 @@
                     <el-input v-model="data.form.college" autocomplete="off"/>
                 </el-form-item>
                 <el-form-item prop="avatar" label="头像">
-                    <el-upload action="http://127.0.0.1:8080/file/upload"
+                    <el-upload action="http://127.0.0.1:8088/file/upload"
                                :headers="{token: data.user.token}"
                                :on-success="handleFileSuccess"
                                list-type="picture"
@@ -162,8 +153,8 @@ const getData = () => {
         }
     ).then(res => {
         if (res.code === '200') {
-            data.tableData = res.data.list
-            data.total = res.data.total
+            data.tableData = res.data.content
+            data.total = res.data.totalElements
         } else {
             ElMessage.error(res.msg)
         }
@@ -255,23 +246,6 @@ const deleteBatch = () => {
     })
 }
 
-const exportDate = () => {
-    let idsStr = data.ids.join(",") // 把数组转换成 字符串  [1,2,3] -> "1,2,3"
-    let url = `http://localhost:8080/student/export?username=${data.username === null ? '' : data.username}`
-        + `&name=${data.name === null ? '' : data.name}`
-        + `&ids=${idsStr}`
-        + `&token=${data.user.token}`
-    window.open(url)
-}
-
-const handleImportSuccess = (res) => {
-    if (res.code === '200') {
-        ElMessage.success("导入成功")
-        getData()
-    } else {
-        ElMessage.error(res.msg)
-    }
-}
 const handleFileSuccess = (res) => {
     data.form.avatar = res.data
 }

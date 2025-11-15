@@ -39,20 +39,13 @@
                 class="member-table"
                 :header-cell-style="headerCellStyle"
         >
-            <el-table-column prop="studentId" label="学生学号"/>
+            <el-table-column prop="studentUsername" label="学生学号"/>
             <el-table-column prop="studentName" label="学生姓名"/>
             <el-table-column prop="clubName" label="社团名称"/>
             <el-table-column prop="role" label="角色">
                 <template #default="scope">
                     <el-tag :type="scope.row.role === 'LEADER' ? 'primary' : 'success'">
                         {{ scope.row.role === 'LEADER' ? '社长' : '成员' }}
-                    </el-tag>
-                </template>
-            </el-table-column>
-            <el-table-column prop="status" label="状态">
-                <template #default="scope">
-                    <el-tag :type="scope.row.status === 'ACTIVE' ? 'success' : 'warning'">
-                        {{ scope.row.status === 'ACTIVE' ? '活跃' : '非活跃' }}
                     </el-tag>
                 </template>
             </el-table-column>
@@ -231,8 +224,8 @@ const getData = () => {
         }
     }).then(res => {
         if (res.code === '200') {
-            data.tableData = res.data.list;
-            data.total = res.data.total;
+            data.tableData = res.data.content || [];
+            data.total = res.data.totalElements || 0;
         }
     });
 };

@@ -30,7 +30,7 @@ public class FileController {
         String filename = System.currentTimeMillis()+ "-" + file.getOriginalFilename(); // 文件的原始名称
         // 写出文件
         FileUtil.writeBytes(bytes,filePath + filename);
-        String url = "http://localhost:8080/file/download/" + filename;
+        String url = "http://localhost:8088/file/download/" + filename;
         return Result.success(url);
     }
 
@@ -65,7 +65,7 @@ public class FileController {
         } catch (Exception e) {
             System.out.println("文件上传失败");
         }
-        String http = "http://localhost:8080/file/download/" + flag + "-" + fileName;
+        String http = "http://localhost:8088/file/download/" + flag + "-" + fileName;
         Map<String,Object> resMap = new HashMap<>();
         // 图片上传成功后，返回图片的url和文件名
         resMap.put("errno",0);

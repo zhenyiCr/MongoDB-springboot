@@ -17,12 +17,6 @@ public class NoticeController {
     @Resource
     NoticeService noticeService;
 
-    @GetMapping("/notice")
-    public Result notice(String title) {
-        String notice = noticeService.Notice(title);
-        return Result.success(notice);
-    }
-
     @PostMapping("/add")
     public Result add(@RequestBody Notice notice) { // @RequestBody 接受前端传来的json数据
         noticeService.add(notice);

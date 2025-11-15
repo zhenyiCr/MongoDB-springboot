@@ -182,7 +182,7 @@ const data = reactive({
     pageNum: 1,
     pageSize: 10,
     total: 0,
-    searchStatus: '',
+    searchStatus: null,
     clubData: [],
     rules: {
         clubId: [{ required: true, message: '请输入社团ID', trigger: 'blur' }],
@@ -239,14 +239,14 @@ const getData = () => {
     }
     request.get('/application/selectPage', { params }).then(res => {
         if (res.code === '200') {
-            data.tableData = res.data.list;
-            data.total = res.data.total;
+            data.tableData = res.data.content || [];
+            data.total = res.data.totalElements || 0;
         }
     })
 }
 // 重置查询条件
 const reset = () => {
-    data.searchStatus = '';
+    data.searchStatus = null;
     getData();
 }
 // 提交申请
@@ -273,37 +273,44 @@ const handleApprove = (row, status) => {
         ElMessage.warning('无权限审核该申请');
         return;
     }
-    let remark = '';
-    if (status === 'REJECTED') {
-        remark = prompt('请输入拒绝理由：');
-        if (remark === null) return;
-        if (!remark.trim()) {
-            ElMessage.warning('拒绝理由不能为空');
-            return;
-        }
-    }
-
-    request.put('/application/approve', {
-        id: row.id,
-        status: status,
-        remark
-    }).then(res => {
-        if (res.code === '200') {
-            ElMessage.success('操作成功');
-            // 审核通过时，自动添加到社团成员
-            if (status === 'APPROVED') {
-                request.post('/clubMember/add', {
-                    clubId: row.clubId,
-                    studentId: row.studentId
-                }).then(memberRes => {
-                    if (memberRes.code !== '200') {
-                        ElMessage.warning('加入社团失败：' + memberRes.msg);
+    let remark = prompt('请输入理由：');
+    if (status === 'APPROVED') {
+        // 先调用添加成员接口
+        request.post('/clubMember/add', {
+            clubId: row.clubId,
+            studentId: row.studentId
+        }).then(memberRes => {
+            if (memberRes.code === '200') {
+                // 成员添加成功，再更新申请状态
+                request.put('/application/approve', {
+                    id: row.id,
+                    status: status,
+                    remark
+                }).then(res => {
+                    if (res.code === '200') {
+                        ElMessage.success('操作成功');
+                        getData();
+                    } else {
+                        ElMessage.error('更新申请状态失败：' + res.msg);
                     }
-                })
+                });
+            } else {
+                ElMessage.error('加入社团失败：' + memberRes.msg);
             }
-            getData();
-        }
-    })
+        });
+    } else {
+        // 拒绝申请时直接更新状态（无需添加成员）
+        request.put('/application/approve', {
+            id: row.id,
+            status: status,
+            remark
+        }).then(res => {
+            if (res.code === '200') {
+                ElMessage.success('操作成功');
+                getData();
+            }
+        });
+    }
 }
 
 // 初始化加载列表

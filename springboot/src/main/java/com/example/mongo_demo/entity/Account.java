@@ -19,5 +19,7 @@ public class Account {
     private String name;
     @Field("role")
     private String role;
+    @Field("avatar")
+    private String avatar;
 
 }

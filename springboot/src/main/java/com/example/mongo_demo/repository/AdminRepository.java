@@ -15,7 +15,6 @@ import java.util.Optional;
 @Repository
 public interface AdminRepository extends MongoRepository<Admin,String> {
 
-    Admin save(Admin admin);
 
     // 根据条件查询所有（对应原selectAll）
     List<Admin> findAll();
@@ -32,7 +31,7 @@ public interface AdminRepository extends MongoRepository<Admin,String> {
     String findUsernameById(String id);
 
     // 根据ID删除（对应原deleteById）
-    @Query(value = "{'_id': ?0}")
+
     void deleteById(String id);
 
     // 根据ID查询（对应原selectById）

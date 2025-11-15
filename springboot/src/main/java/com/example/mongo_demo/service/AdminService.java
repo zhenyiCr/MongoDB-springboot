@@ -50,7 +50,7 @@ public class AdminService {
         if (dbAdmin != null) {
             throw new CustomerException("账号已存在");
         }
-        admin.setRole("USER");
+        admin.setRole("ADMIN");
         if (StrUtil.isBlank(admin.getPassword())) {
             admin.setPassword("admin");
         }
@@ -86,9 +86,7 @@ public class AdminService {
     }
 
     public void update(Admin admin) {
-
         adminRepository.save(admin);
-
     }
 
     public void deleteById(String id) {

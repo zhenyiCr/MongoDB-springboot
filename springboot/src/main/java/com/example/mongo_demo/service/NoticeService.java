@@ -19,11 +19,6 @@ public class NoticeService {
     @Resource
     NoticeRepository noticeRepository;
 
-    public String Notice(String title) {
-        if (title.equals("notice"))
-            return title;
-        else throw new CustomerException("标题不存在");
-    }
 
     public List<Notice> selectAll(Notice notice) {
         // 构建动态查询条件（非null字段作为查询条件）
