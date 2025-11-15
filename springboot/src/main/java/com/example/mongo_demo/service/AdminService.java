@@ -3,10 +3,12 @@ package com.example.mongo_demo.service;
 import cn.hutool.core.util.StrUtil;
 import com.example.mongo_demo.entity.Account;
 import com.example.mongo_demo.entity.Admin;
+import com.example.mongo_demo.entity.ChangePasswordDTO;
 import com.example.mongo_demo.exception.CustomerException;
 import com.example.mongo_demo.repository.AdminRepository;
 import com.example.mongo_demo.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,14 +34,14 @@ public class AdminService {
         else throw new CustomerException("用户名不存在");
     }
 
-    public List<Admin> selectAll() {
+    public List<Admin> selectAll(Admin admin) {
         return adminRepository.findAll();
     }
     public List<Admin> selectById(List<String> id) {
         return adminRepository.findAllById(id);
     }
-    public Admin findAdminsById(String id) {
-        return adminRepository.findAdminsById(id);
+    public Admin findAdminById(String id) {
+        return adminRepository.findAdminById(id);
     }
 
     public void add(Admin admin) {
@@ -55,33 +57,32 @@ public class AdminService {
         adminRepository.save(admin);
     }
 
-    public PageImpl<Admin> findAll(int pageNum, int pageSize,Admin admin) {
-        // 1. 构建查询条件
+    // 返回类型改为 Page<Admin>（接口类型）
+    public Page<Admin> selectPage(int pageNum, int pageSize, Admin admin) {
+        // 1. 构建查询条件（支持模糊查询）
         Criteria criteria = new Criteria();
-        // 如果adminname不为空，添加精确匹配条件
+        // 用户名模糊查询（忽略大小写）
         if (StrUtil.isNotBlank(admin.getUsername())) {
-            criteria.and("username").regex(admin.getUsername(),"i");
-            //criteria.and("username").is(admin.getUsername()); // 精确匹配条件
+            criteria.and("username").regex(admin.getUsername(), "i");
         }
-        // 如果name不为空，添加模糊匹配条件
+        // 姓名模糊查询（忽略大小写）
         if (StrUtil.isNotBlank(admin.getName())) {
-            criteria.and("name").regex(admin.getName(), "i"); // "i"表示忽略大小写
+            criteria.and("name").regex(admin.getName(), "i");
         }
         Query query = new Query(criteria);
 
-        // 2. 计算总条数
+        // 2. 计算符合条件的总条数
         long total = mongoTemplate.count(query, Admin.class);
 
-        // 1. 构建 Pageable 对象 (使用 PageRequest)
-        // ** 非常重要：页码是从 0 开始的！**
-        Pageable pageable = PageRequest.of(pageNum-1, pageSize);
-        query.with(pageable); // 给查询添加分页参数
+        // 3. 构建分页参数（MongoDB页码从0开始，需减1）
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+        query.with(pageable); // 为查询添加分页参数（跳过前面的记录+限制每页条数）
 
         // 4. 查询当前页数据
         List<Admin> admins = mongoTemplate.find(query, Admin.class);
 
+        // 5. 返回 Page 接口的实现类 PageImpl（向上转型为 Page<Admin>）
         return new PageImpl<>(admins, pageable, total);
-
     }
 
     public void update(Admin admin) {
@@ -109,9 +110,23 @@ public class AdminService {
         if (!dbAdmin.getPassword().equals(account.getPassword())) {
             throw new CustomerException("账号或密码错误");
         }
+
         // 创建token并返回给前端
         String token = TokenUtils.createToken(dbAdmin.getId() + "-" +"ADMIN", dbAdmin.getPassword());
         dbAdmin.setToken(token);
+        return dbAdmin;
+    }
+
+    public Admin updatePassword(ChangePasswordDTO changePasswordDTO, Account currentAccount) {
+        Admin dbAdmin = adminRepository.findById(currentAccount.getId()).orElse(null);
+        // 正确：用用户输入的oldPassword对比数据库密码
+        if (!dbAdmin.getPassword().equals(changePasswordDTO.getOldPassword())) {
+            throw new CustomerException("原密码错误");
+        }
+        dbAdmin.setPassword(changePasswordDTO.getNewPassword());
+        // 用新密码重新生成token（关键：密码变更后旧token失效）
+        dbAdmin.setToken(TokenUtils.createToken(dbAdmin.getId() + "-ADMIN", dbAdmin.getPassword()));
+        adminRepository.save(dbAdmin);
         return dbAdmin;
     }
 }

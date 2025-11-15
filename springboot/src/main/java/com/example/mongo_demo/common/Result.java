@@ -1,9 +1,5 @@
 package com.example.mongo_demo.common;
 
-import com.example.mongo_demo.entity.User;
-import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
-
 public class Result {
     private String code;
     private Object data;
