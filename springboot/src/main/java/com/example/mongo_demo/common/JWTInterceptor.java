@@ -7,7 +7,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.example.mongo_demo.entity.Account;
 import com.example.mongo_demo.exception.CustomerException;
 import com.example.mongo_demo.service.AdminService;
-import com.example.mongo_demo.service.UserService;
+import com.example.mongo_demo.service.StudentService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,7 +20,8 @@ public class JWTInterceptor implements HandlerInterceptor {
     @Resource
     AdminService adminService;
     @Resource
-    UserService userService;
+    StudentService studentService;
+
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -44,9 +45,9 @@ public class JWTInterceptor implements HandlerInterceptor {
             String role = split[1];
             // 根据token解析出来的userId 去对应的表查询用户信息
             if ("ADMIN".equals(role)) {
-                account = adminService.findAdminsById(id);
-            } else if ("USER".equals(role)) {
-                account = userService.findUserById(id);
+                account = adminService.findAdminById(id);
+            } else if ("STUDENT".equals(role)) {
+                account = studentService.findStudentById(id);
             } else {
                 throw new CustomerException("404", "出现错误");
             }

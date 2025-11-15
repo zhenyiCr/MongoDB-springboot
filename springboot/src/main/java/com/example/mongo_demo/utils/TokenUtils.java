@@ -7,7 +7,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.example.mongo_demo.entity.Account;
 import com.example.mongo_demo.exception.CustomerException;
 import com.example.mongo_demo.service.AdminService;
-import com.example.mongo_demo.service.UserService;
+import com.example.mongo_demo.service.StudentService;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,16 +23,18 @@ public class TokenUtils {
     @Resource
     AdminService adminService;
     @Resource
-    UserService userService;
+    StudentService studentService;
+
+
 
     static AdminService staticAdminService;
-    static UserService staticUserService;
+    static StudentService staticStudentService;
 
     // springboot工程启动后会加载这段代码
     @PostConstruct
     public void init() {
         staticAdminService = adminService;
-        staticUserService = userService;
+        staticStudentService = studentService;
     }
 
     // 生成token
@@ -57,9 +59,9 @@ public class TokenUtils {
         String role = split[1];
         // 根据token解析出来的userId 去对应的表查询用户信息
         if ("ADMIN".equals(role)) {
-            return staticAdminService.findAdminsById(id);
+            return staticAdminService.findAdminById(id);
         } else if ("USER".equals(role)) {
-            return staticUserService.findUserById(id);
+            return staticStudentService.findStudentById(id);
         } else {
             throw new CustomerException("404", "出现错误");
         }
