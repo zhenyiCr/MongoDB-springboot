@@ -35,7 +35,7 @@ public class StudentService {
         // 判断用户名是否已存在
         Student dbStudent = studentRepository.findByUsername(student.getUsername());
         if (dbStudent != null) {
-            throw new CustomerException("账号已存在");
+            throw new CustomerException("学号已存在");
         }
         if (StrUtil.isBlank(student.getPassword())) {
             student.setPassword("student");

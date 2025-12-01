@@ -12,7 +12,7 @@
             </div>
 
             <div style="margin-bottom: 5px;margin-top: 5px">
-                <el-button @click="headleAdd" type="primary">新增</el-button>
+                <el-button @click="headleAdd" type="primary" v-if="data.user?.role === 'ADMIN'">新增</el-button>
                 <el-button @click="deleteBatch" type="danger" v-if="data.user.role==='ADMIN'">批量删除</el-button>
 
             </div>
@@ -20,7 +20,7 @@
         <div>
             <el-table :data="data.tableData" style="width: 100%" @selection-change="handleSelectionChange"
                       :header-cell-style="{fontWeight:'bold',background:'#f5f5f5'}">
-                <el-table-column type="selection" width="55"/>
+                <el-table-column type="selection" width="55" v-if="data.user?.role === 'ADMIN'"/>
                 <el-table-column prop="name" label="名称"/>
                 <el-table-column prop="leaderName" label="社长姓名"/>
                 <el-table-column prop="description" label="内容">

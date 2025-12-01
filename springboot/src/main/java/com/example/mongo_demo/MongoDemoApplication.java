@@ -10,3 +10,11 @@ public class MongoDemoApplication {
     }
 
 }
+
+
+//db.admin.insertOne({
+//  "username": "admin",
+//  "password": "admin",
+//  "name": "普通管理员",
+//  "role": "ADMIN"
+//})

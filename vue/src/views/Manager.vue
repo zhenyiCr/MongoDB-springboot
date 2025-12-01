@@ -60,36 +60,31 @@
                     </el-menu-item>
                     <el-menu-item index="/manager/Club">
                         <el-icon>
-                            <House/>
+                            <OfficeBuilding/>
                         </el-icon>
                         <span>社团信息</span>
                     </el-menu-item>
                     <el-sub-menu index="system" v-if="data.user?.role === 'ADMIN'">
                         <template #title>
-                            <el-icon><User /></el-icon>
+                            <el-icon><UserFilled /></el-icon>
                             <span>角色管理</span>
                         </template>
                         <!-- 管理员信息：仅ADMIN可见 -->
                         <el-menu-item index="/manager/admin">管理员信息</el-menu-item>
-                        <!-- 学生信息：ADMIN和LEADER可见 -->
                         <el-menu-item index="/manager/student">学生信息</el-menu-item>
                     </el-sub-menu>
 
-                    <el-menu-item index="/manager/notice">
-                        <el-icon>
-                            <House/>
-                        </el-icon>
+                    <el-menu-item index="/manager/notice" v-if="data.user?.role === 'ADMIN'">
+                        <el-icon><Bell /></el-icon>
                         <span>系统公告</span>
                     </el-menu-item>
                     <el-menu-item index="/manager/ApplicationManage">
-                        <el-icon>
-                            <House/>
-                        </el-icon>
+                            <el-icon><CirclePlus/></el-icon>
                         <span>申请</span>
                     </el-menu-item>
                     <el-menu-item index="/manager/clubMemberManage">
                         <el-icon>
-                            <House/>
+                            <User/>
                         </el-icon>
                         <span>社团成员管理</span>
                     </el-menu-item>

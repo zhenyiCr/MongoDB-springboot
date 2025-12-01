@@ -100,7 +100,12 @@ public class ClubService {
 
     public Page<Club> selectPage(Integer pageNum, Integer pageSize, Club club) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
-        Example<Club> example = Example.of(club);
+        // 1. 创建 ExampleMatcher，配置模糊查询规则
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                // 对 "name" 字段进行模糊查询（like '%值%'）
+                .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains())
+                .withIgnoreNullValues();
+        Example<Club> example = Example.of(club, matcher);
         Page<Club> clubPage = clubRepository.findAll(example, pageable);
         List<Club> clubs = clubPage.getContent();
 
