@@ -116,19 +116,26 @@
 
         <!-- 修改角色弹窗 -->
         <el-dialog
-                title="修改成员角色"
-                v-model="data.roleDialogVisible"
-                width="400px"
+            title="修改成员角色"
+            v-model="data.roleDialogVisible"
+            width="400px"
         >
             <el-form
-                    ref="roleFormRef"
-                    :model="data.roleForm"
-                    label-width="100px"
+                ref="roleFormRef"
+                :model="data.roleForm"
+                label-width="100px"
             >
                 <el-form-item label="成员">
                     <span>{{ data.roleForm.studentName }}</span>
                 </el-form-item>
-                <el-form-item prop="role" label="新角色">
+                <el-form-item label="所属社团">
+                    <span>{{ getClubName(data.roleForm.clubId) }}</span>
+                </el-form-item>
+                <el-form-item
+                    prop="role"
+                    label="新角色"
+                    :rules="[{ required: true, message: '请选择角色', trigger: 'change' }]"
+                >
                     <el-radio-group v-model="data.roleForm.role">
                         <el-radio label="MEMBER">成员</el-radio>
                         <el-radio label="LEADER">社长</el-radio>
@@ -157,7 +164,7 @@ const data = reactive({
     pageSize: 10,
     total: 0,
     selectedClubId: '',
-
+    clubMap: new Map(), // 用于缓存社团ID到名称的映射
     // 添加成员相关
     addDialogVisible: false,
     clubSelectDisabled: false, // 新增：是否禁用社团选择器
@@ -204,6 +211,11 @@ const getClubs = () => {
     request.get('/club/selectAll').then(res => {
         if (res.code === '200') {
             data.clubList = res.data;
+            // 初始化社团ID到名称的映射
+            data.clubMap.clear();
+            res.data.forEach(club => {
+                data.clubMap.set(club.id, club.name);
+            })
             // LEADER默认选中自己的社团，且禁用选择器
             if (data.user.role === 'LEADER' && data.clubList.length > 0) {
                 data.selectedClubId = data.clubList[0].id;
@@ -214,6 +226,10 @@ const getClubs = () => {
     });
 };
 
+// 获取社团名称的方法
+const getClubName = (clubId) => {
+    return data.clubMap.get(clubId) || '';
+};
 // 获取成员列表
 const getData = () => {
     request.get('/clubMember/selectPage', {
@@ -274,7 +290,8 @@ const handleUpdateRole = (row) => {
     data.roleForm = {
         id: row.id,
         role: row.role,
-        studentName: row.studentName
+        studentName: row.studentName, // 新增：传递学生姓名
+        clubId: row.clubId // 新增：传递社团ID
     };
     data.roleDialogVisible = true;
 };

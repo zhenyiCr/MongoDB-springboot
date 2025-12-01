@@ -194,7 +194,42 @@ public class ClubMemberService {
         if (existingMemberOpt.isEmpty()) {
             throw new CustomerException("该成员不存在");
         }
+        ClubMember existingMember = existingMemberOpt.get();
         checkMemberPermission(clubMember);
+
+        // 获取当前社团ID
+        String clubId = existingMember.getClubId();
+        String newRole = clubMember.getRole();
+        String oldRole = existingMember.getRole();
+
+        // 1. 如果要设置为社长，检查当前社团是否已有社长
+        if ("LEADER".equals(newRole)) {
+            List<ClubMember> leaders = clubMemberRepository.findByClubIdAndRole(clubId, "LEADER");
+            if (!leaders.isEmpty() && !leaders.get(0).getId().equals(clubMember.getId())) {
+                throw new CustomerException("该社团已存在社长，无法重复设置");
+            }
+
+            // 更新社团的社长ID
+            Optional<Club> clubOpt = clubRepository.findById(clubId);
+            if (clubOpt.isPresent()) {
+                Club club = clubOpt.get();
+                club.setLeaderId(existingMember.getStudentId());
+                clubRepository.save(club);
+            }
+        }
+        // 2. 如果原角色是社长，现在要改为成员，清空社团的社长ID
+        else if ("LEADER".equals(oldRole) && "MEMBER".equals(newRole)) {
+            Optional<Club> clubOpt = clubRepository.findById(clubId);
+            if (clubOpt.isPresent()) {
+                Club club = clubOpt.get();
+                // 确认当前社团的社长ID确实是该成员
+                if (existingMember.getStudentId().equals(club.getLeaderId())) {
+                    club.setLeaderId(null);
+                    clubRepository.save(club);
+                }
+            }
+        }
+
         // 调用Repository的更新方法
         clubMemberRepository.updateRoleById(clubMember.getId(), clubMember.getRole());
     }

@@ -47,7 +47,7 @@
                 <!--                        <el-image v-if="scope.row.avatar" :src="scope.row.avatar" :preview-src-list="[scope.row.avatar]" style="width: 40px;height: 40px ;border-radius: 50%;display: block" />-->
                 <!--                    </template>-->
                 <!--                </el-table-column>-->
-                <el-table-column prop="username" label="账户"/>
+                <el-table-column prop="username" label="学号"/>
                 <el-table-column prop="name" label="姓名"/>
                 <el-table-column prop="major" label="专业"/>
                 <el-table-column prop="grade" label="年级"/>
